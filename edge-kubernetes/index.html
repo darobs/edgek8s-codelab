@@ -92,7 +92,7 @@ EOF</code></pre>
         <p>Deploy the <strong>iotedged</strong> and <strong>Edge Agent</strong> pods in your Kubernetes cluster by installing the Edge Helm chart like so:</p>
 <pre>helm install \
   --name edgy \
-  --set &#34;&lt;DEVICE CONNECTION STRING HERE&gt;&#34; \
+  --set &#34;deviceConnectionString=&lt;DEVICE CONNECTION STRING HERE&gt;&#34; \
   edgek8s/edge-kubernetes</pre>
 <aside class="warning"><p><strong>Important</strong>: Note that this deploys <strong>iotedged</strong> in &#34;QuickStart&#34; mode which means that <strong>iotedged</strong> will use a self-signed device CA cert for generating server and identity certificates. This device CA cert expires after 90 days.</p>
 <p>Also, this will cause <strong>iotedged</strong> to use the container file system to store the certificate files and the master encryption key. This will not work very well in case the <strong>iotedged</strong> pod gets re-created by Kubernetes as it will end up generating brand new certificates and encryption keys thereby disabling all existing modules. Please see the section titled &#34;<em>Persistent storage for iotedged</em>&#34; to learn how this can be dealt with.</p>
