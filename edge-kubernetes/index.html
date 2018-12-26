@@ -63,8 +63,8 @@ roleRef:
   name: cluster-admin
 subjects:
   - kind: ServiceAccount
-        name: tiller
-        namespace: kube-system
+    name: tiller
+    namespace: kube-system
 EOF</code></pre>
 <ol type="1" start="4">
 <li>Create the service account:</li>
@@ -84,6 +84,8 @@ EOF</code></pre>
       <google-codelab-step label="Add Edge helm repo to your installation" duration="0">
         <p>Add the Edge Helm repository to your helm CLI by running the following command:</p>
 <pre>helm repo add edgek8s https://edgek8s.blob.core.windows.net/helm/</pre>
+<p>Now update your local Helm repository index by running:</p>
+<pre>helm repo update</pre>
 
 
       </google-codelab-step>
@@ -117,30 +119,16 @@ EOF</code></pre>
       <google-codelab-step label="Persistent storage for iotedged" duration="0">
         <p>In order to gain HA benefits, you&#39;ll want to run <strong>iotedged</strong> with persistent storage attached to it instead of using the transient container file system. You can do this by doing the following:</p>
 <ol type="1" start="1">
-<li>Create a <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/" target="_blank">persistent volume</a> in your cluster</li>
-<li>Deploy <strong>iotedged</strong> and <strong>Edge Agent</strong> specifying a persistent volume claim name (<code>iotedged-pvc</code> below) like so:</li>
+<li>Ensure your cluster has at least one <a href="https://kubernetes.io/docs/concepts/storage/storage-classes/" target="_blank">storage class</a> that can be used to create <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/" target="_blank">persistent volume</a> claims.</li>
+<li>When running <code>helm install</code> specify a persistent volume claim name (<code>iotedged-pvc</code> below) and a storage class name (called <code>std</code> below) like so:</li>
 </ol>
 <pre>helm install \
   --name edgy \
-  --set &#34;&lt;DEVICE CONNECTION STRING HERE&gt;&#34; \
-  --set &#34;iotedged.data.persistentVolumeClaim.claimName=iotedged-pvc&#34; \
+  --set &#34;deviceConnectionString=&lt;DEVICE CONNECTION STRING HERE&gt;&#34; \
+  --set &#34;iotedged.data.persistentVolumeClaim.name=iotedged-pvc&#34; \
+  --set &#34;iotedged.data.persistentVolumeClaim.storageClassName=std&#34; \
   edgek8s/edge-kubernetes</pre>
-<ol type="1" start="3">
-<li>Create the persistent volume claim (PVC) with the same name (<code>iotedged-pvc</code> if you used the example above).  Here&#39;s a sample YAML you might use. Please note that you&#39;ll want to use the right value for the <strong>storageClassName</strong> attribute depending on what your persistent volume supports. Also, your PVC needs to be created in the namespace <strong>microsoft-azure-devices-edge</strong>.</li>
-</ol>
-<pre><code>apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: iotedged-pvc
-  namespace: microsoft-azure-devices-edge
-spec:
-  resources:
-        requests:
-          storage: 1Gi
-  accessModes:
-        - ReadWriteMany
-  storageClassName: standard</code></pre>
-<p>Note that these steps need to be done in the sequence given above because the PVC needs to be created in the same namespace as the other resources (the namespace being <strong>microsoft-azure-devices-edge</strong>) and the namespace itself is created when the helm chart is installed.</p>
+<p>This will cause the <strong>iotedged</strong> deployment to use a persistent volume claim backed storage location to save its state. This way, if the <strong>iotedged</strong> pod gets re-created by the Kubernetes controller, it will continue to use the same encryption key and root CA that it had created before.</p>
 
 
       </google-codelab-step>
@@ -174,6 +162,7 @@ kubectl delete configmap -n kube-system edgy.v1</pre>
 <li>darobs</li>
 <li>veyalla</li>
 </ul>
+<p>Or alternatively, you should be able to reach out to the dev team on the <a href="https://teams.microsoft.com/l/channel/19%3ab12ed6d10f57458992fb2d6766408ca2%40thread.skype/General?groupId=18423957-a2c4-4359-8916-1a2215181a2a&tenantId=72f988bf-86f1-41af-91ab-2d7cd011db47" target="_blank">Teams channel</a>.</p>
 
 
       </google-codelab-step>
