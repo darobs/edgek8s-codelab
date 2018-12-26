@@ -108,6 +108,8 @@ EOF</code></pre>
 </aside>
 <pre>azureiotedge/azureiotedge-agent:0.1.0-alpha</pre>
 <p>A significant part of the Kubernetes integration code lives in the custom Edge Agent module image shown above. If you use the Edge Agent image that one normally uses (from the <em>mcr.microsoft.com</em> registry) then it won&#39;t work.</p>
+<p>All of the Edge specific resources are deployed in Kubernetes in a namespace called <code>microsoft-azure-devices-edge</code>. You can keep an eye on the pods as they get deployed by running:</p>
+<pre>kubectl get pods -n microsoft-azure-devices-edge -w</pre>
 
 
       </google-codelab-step>
@@ -139,6 +141,18 @@ spec:
         - ReadWriteMany
   storageClassName: standard</code></pre>
 <p>Note that these steps need to be done in the sequence given above because the PVC needs to be created in the same namespace as the other resources (the namespace being <strong>microsoft-azure-devices-edge</strong>) and the namespace itself is created when the helm chart is installed.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Clean up" duration="0">
+        <p>Assuming <code>edgy</code> is the name you used when running <code>helm install</code>, all deployed resources can be deleted by running:</p>
+<pre>helm delete --purge edgy</pre>
+<h2><strong>Really really clean up</strong></h2>
+<p>It is possible that you may sometimes run into a situation where helm gets into a bad state and is unable to fully remove the installation (especially if you repeatedly install/uninstall the helm chart and interrupt in the middle and so forth). If this occurs, then the following commands should get rid of the deployments:</p>
+<pre>kubectl delete namespace microsoft-azure-devices-edge
+kubectl delete configmap -n kube-system edgy.v1</pre>
+<p>After this, running <code>helm ls --all</code> should no longer show the edge installation.</p>
 
 
       </google-codelab-step>
