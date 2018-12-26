@@ -1,0 +1,23 @@
+{
+  "environment": "web",
+  "source": "1qidwj_RstEYv8m1oowcX8tT-iOV-HtQnIL8m3Ds4DmM",
+  "format": "html",
+  "prefix": "../../",
+  "mainga": "UA-49880327-14",
+  "updated": "2018-12-26T03:19:39Z",
+  "id": "edge-kubernetes",
+  "duration": 0,
+  "title": "Azure IoT Edge + Kubernetes",
+  "author": "rajave",
+  "summary": "In this codelab, you'll deploy Azure IoT Edge on a Kubernetes cluster.",
+  "theme": "iot",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "IoT"
+  ],
+  "tags": [],
+  "feedback": "https://github.com/avranju/iotedge-k8s/issues",
+  "url": "edge-kubernetes"
+}
