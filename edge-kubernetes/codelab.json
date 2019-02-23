@@ -2,7 +2,7 @@
   "environment": "web",
   "source": "1qidwj_RstEYv8m1oowcX8tT-iOV-HtQnIL8m3Ds4DmM",
   "format": "html",
-  "prefix": "https://storage.googleapis.com",
+  "prefix": "../../",
   "mainga": "UA-49880327-14",
   "updated": "2019-02-23T02:06:51Z",
   "id": "edge-kubernetes",
